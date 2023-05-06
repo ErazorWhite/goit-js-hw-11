@@ -15,7 +15,7 @@ Notify.init({
 
 const options = {
   root: null,
-  rootMargin: '300px',
+  rootMargin: '600px',
   threshold: 0,
 };
 let observer = new IntersectionObserver(onPagination, options);
@@ -51,7 +51,6 @@ function onSubmit(e) {
       renderPhotoCardsMarkup(pictures.hits);
       observer.observe(guardEl);
       enableSimpleLightBox();
-      showLoadMoreBtn();
     })
     .catch(console.log);
 }
@@ -63,7 +62,8 @@ function onPagination(entries, observer) {
       api
         .getPicturesByQuerry()
         .then(pictures => {
-          if (pictures.hits.length === 0) {
+          if (galleryEl.children.length === 0) return;
+          if (api.page > Math.ceil(pictures.totalHits / api.perPage)) {
             Notify.failure(
               "We're sorry, but you've reached the end of search results."
             );

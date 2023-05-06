@@ -1,4 +1,4 @@
-// Your API key: 36098087-1a56f41df652eefc24b37e33b
+import axios from 'axios';
 
 export class PixabayAPI {
   constructor(initPage = 1, initPerPage = 40) {
@@ -10,10 +10,11 @@ export class PixabayAPI {
   #query = '';
   #curPage = 1;
   #perPage = 40;
+  #API_KEY = '36098087-1a56f41df652eefc24b37e33b';
 
-  getPicturesByQuerry() {
+  async getPicturesByQuerry() {
     const params = new URLSearchParams({
-      key: '36098087-1a56f41df652eefc24b37e33b',
+      key: this.#API_KEY,
       q: this.#query,
       image_type: 'photo',
       orientation: 'horizontal',
@@ -21,14 +22,12 @@ export class PixabayAPI {
       page: this.#curPage,
       per_page: this.#perPage,
     });
+
     const url = `${this.#BASE_URL}?${params}`;
 
-    return fetch(url).then(response => {
-      if (!response.ok) {
-        throw new Error(response.status);
-      }
-      return response.json();
-    });
+    const response = await axios.get(url);
+
+    return response.data;
   }
 
   set query(newQuery) {
