@@ -30,7 +30,7 @@ function onSubmit(e) {
       console.log(pictures);
 
       if (pictures.hits.length === 0) {
-        Notify.info(
+        Notify.failure(
           'Sorry, there are no images matching your search query. Please try again.'
         );
         return;
