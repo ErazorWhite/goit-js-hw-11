@@ -7,9 +7,10 @@
     display: flex;
     flex-wrap: wrap;
     gap: 30px;
+    margin-bottom: 30px;
 }
 
-.photo-card {
+.photo-link {
     flex-basis: 100%;
 
     @include for-tablet-up {
@@ -18,6 +19,11 @@
     @include for-desktop-up {
         flex-basis: calc((100% - 90px) / 4);
     }
+}
+
+.photo-card {
+    width: 100%;
+    height: 100%;
 }
 
 .photo-card > img {
@@ -45,4 +51,28 @@
 
 .info-item {
     text-align: center;
+}
+
+.load-more {
+    font-weight: bold;
+    font-size: 19px;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+    align-items: center;
+    min-height: 50px;
+    min-width: 140px;
+    margin-bottom: 40px;
+
+    background-color: $accentColor;
+    color: white;
+
+    border: 0 solid transparent;
+    border-radius: 2px;
+    cursor: pointer;
+
+    &-isHidden {
+        @extend .visually-hidden;
+    }
 }
