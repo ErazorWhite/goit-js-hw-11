@@ -53,26 +53,28 @@
     text-align: center;
 }
 
-.load-more {
-    font-weight: bold;
-    font-size: 19px;
-    display: flex;
-    margin-left: auto;
-    margin-right: auto;
-    justify-content: center;
-    align-items: center;
-    min-height: 50px;
-    min-width: 140px;
-    margin-bottom: 40px;
+// С переходом на Infinite Scroll
+// стили Load More кнопки больше не нужны
+// .load-more {
+//     font-weight: bold;
+//     font-size: 19px;
+//     display: flex;
+//     margin-left: auto;
+//     margin-right: auto;
+//     justify-content: center;
+//     align-items: center;
+//     min-height: 50px;
+//     min-width: 140px;
+//     margin-bottom: 40px;
 
-    background-color: $accentColor;
-    color: white;
+//     background-color: $accentColor;
+//     color: white;
 
-    border: 0 solid transparent;
-    border-radius: 2px;
-    cursor: pointer;
+//     border: 0 solid transparent;
+//     border-radius: 2px;
+//     cursor: pointer;
 
-    &-isHidden {
-        @extend .visually-hidden;
-    }
-}
+//     &-isHidden {
+//         @extend .visually-hidden;
+//     }
+// }

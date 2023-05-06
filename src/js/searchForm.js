@@ -13,10 +13,17 @@ Notify.init({
   opacity: 1,
 });
 
+const options = {
+  root: null,
+  rootMargin: '300px',
+  threshold: 0,
+};
+let observer = new IntersectionObserver(onPagination, options);
+
 const searchFormEl = document.querySelector('#search-form');
 const searchInputEl = document.querySelector('.search-form__input');
 const galleryEl = document.querySelector('div.gallery');
-const loadMoreEl = document.querySelector('.load-more');
+const guardEl = document.querySelector('.js-guard');
 
 function onSubmit(e) {
   e.preventDefault();
@@ -28,7 +35,6 @@ function onSubmit(e) {
   }
 
   removePhotoCardsMarkup();
-  hideLoadMoreBtn();
 
   api.query = searchQuerry;
   api.resetPage();
@@ -43,39 +49,34 @@ function onSubmit(e) {
       }
       Notify.success(`Hooray! We found ${pictures.totalHits} images.`);
       renderPhotoCardsMarkup(pictures.hits);
+      observer.observe(guardEl);
       enableSimpleLightBox();
       showLoadMoreBtn();
     })
     .catch(console.log);
 }
 
-function onLoadMore() {
-  hideLoadMoreBtn();
-  api.nextPage();
-  api
-    .getPicturesByQuerry()
-    .then(pictures => {
-      if (pictures.hits.length === 0) {
-        Notify.failure(
-          "We're sorry, but you've reached the end of search results."
-        );
-        return;
-      }
+function onPagination(entries, observer) {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      api.nextPage();
+      api
+        .getPicturesByQuerry()
+        .then(pictures => {
+          if (pictures.hits.length === 0) {
+            Notify.failure(
+              "We're sorry, but you've reached the end of search results."
+            );
+            return;
+          }
 
-      renderPhotoCardsMarkup(pictures.hits);
-      smoothScroll();
-      lightbox.refresh(); // Destroys and reinitilized the lightbox, needed for eg. Ajax Calls, or after dom manipulations
-      showLoadMoreBtn();
-    })
-    .catch(console.log);
-}
-
-function showLoadMoreBtn() {
-  loadMoreEl.classList.remove('load-more-isHidden');
-}
-
-function hideLoadMoreBtn() {
-  loadMoreEl.classList.add('load-more-isHidden');
+          renderPhotoCardsMarkup(pictures.hits);
+          smoothScroll();
+          lightbox.refresh(); // Destroys and reinitilized the lightbox, needed for eg. Ajax Calls, or after dom manipulations
+        })
+        .catch(console.log);
+    }
+  });
 }
 
 function renderPhotoCardsMarkup(pictures) {
@@ -126,7 +127,7 @@ function smoothScroll() {
     galleryEl.firstElementChild.getBoundingClientRect();
 
   window.scrollBy({
-    top: cardHeight * 2,
+    top: cardHeight * 3,
     behavior: 'smooth',
   });
 }
@@ -145,4 +146,33 @@ function enableSimpleLightBox() {
 }
 
 searchFormEl.addEventListener('submit', onSubmit);
-loadMoreEl.addEventListener('click', onLoadMore);
+
+// Знаю, что оставлять мусор плохо, но для себя тут сделаю шпаргалку по Load more кнопке
+// const loadMoreEl = document.querySelector('.load-more');
+// function onLoadMore() {
+//   hideLoadMoreBtn();
+//   api.nextPage();
+//   api
+//     .getPicturesByQuerry()
+//     .then(pictures => {
+//       if (pictures.hits.length === 0) {
+//         Notify.failure(
+//           "We're sorry, but you've reached the end of search results."
+//         );
+//         return;
+//       }
+
+//       renderPhotoCardsMarkup(pictures.hits);
+//       smoothScroll();
+//       lightbox.refresh(); // Destroys and reinitilized the lightbox, needed for eg. Ajax Calls, or after dom manipulations
+//       showLoadMoreBtn();
+//     })
+//     .catch(console.log);
+// }
+// function showLoadMoreBtn() {
+//   loadMoreEl.classList.remove('load-more-isHidden');
+// }
+// function hideLoadMoreBtn() {
+//   loadMoreEl.classList.add('load-more-isHidden');
+// }
+// loadMoreEl.addEventListener('click', onLoadMore);
