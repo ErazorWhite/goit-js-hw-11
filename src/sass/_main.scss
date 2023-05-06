@@ -30,6 +30,17 @@
     display: flex;
     gap: 5px;
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.12), 0px 4px 4px rgba(0, 0, 0, 0.06), 1px 4px 6px rgba(0, 0, 0, 0.16);
+
+    font-size: 16px;
+    line-height: 1.4;
+    letter-spacing: 0.03em;
+
+    @include for-tablet-up {
+        font-size: 14px;
+    }
+    @include for-desktop-up {
+        font-size: 12px;
+    }
 }
 
 .info-item {
