@@ -1,0 +1,21 @@
+.container {
+    min-width: 320px;
+    max-width: $bp-mobile;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+
+    @include for-tablet-up {
+        width: $bp-tablet;
+        max-width: $bp-desktop;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    @include for-desktop-up {
+        width: $bp-desktop;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}

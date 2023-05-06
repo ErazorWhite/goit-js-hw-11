@@ -1,0 +1,37 @@
+.images-container {
+    padding-top: 70px;
+    @extend .container;
+}
+
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.photo-card {
+    flex-basis: 100%;
+
+    @include for-tablet-up {
+        flex-basis: calc((100% - 60px) / 3);
+    }
+    @include for-desktop-up {
+        flex-basis: calc((100% - 90px) / 4);
+    }
+}
+
+.photo-card > img {
+    object-fit: cover;
+    width: 100%;
+    height: 80%;
+}
+
+.info {
+    display: flex;
+    gap: 5px;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.12), 0px 4px 4px rgba(0, 0, 0, 0.06), 1px 4px 6px rgba(0, 0, 0, 0.16);
+}
+
+.info-item {
+    text-align: center;
+}
