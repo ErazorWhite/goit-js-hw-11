@@ -63,6 +63,7 @@ function onLoadMore() {
       }
 
       renderPhotoCardsMarkup(pictures.hits);
+      smoothScroll();
       lightbox.refresh(); // Destroys and reinitilized the lightbox, needed for eg. Ajax Calls, or after dom manipulations
       showLoadMoreBtn();
     })
@@ -117,7 +118,17 @@ function renderPhotoCardsMarkup(pictures) {
       }
     )
     .join(``);
-  galleryEl.innerHTML += markup;
+  galleryEl.insertAdjacentHTML('beforeend', markup);
+}
+
+function smoothScroll() {
+  const { height: cardHeight } =
+    galleryEl.firstElementChild.getBoundingClientRect();
+
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: 'smooth',
+  });
 }
 
 function removePhotoCardsMarkup() {
