@@ -64,7 +64,7 @@ function onPagination(entries, observer) {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       if (galleryEl.children.length === 0) return;
-      if (api.page >= Math.ceil(api.totalPages / api.perPage)) {
+      if (api.page >= Math.ceil(api.totalHits / api.perPage)) {
         Notify.failure(
           "We're sorry, but you've reached the end of search results."
         );

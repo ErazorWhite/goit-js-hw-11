@@ -10,7 +10,7 @@ export class PixabayAPI {
   #query = '';
   #curPage = 1;
   #perPage = 40;
-  #totalPages = 0;
+  #totalHits = 0;
   #API_KEY = '36098087-1a56f41df652eefc24b37e33b';
 
   async getPicturesByQuerry() {
@@ -27,7 +27,7 @@ export class PixabayAPI {
     const url = `${this.#BASE_URL}?${params}`;
 
     const response = await axios.get(url);
-    this.#totalPages = response.data.totalHits;
+    this.#totalHits = response.data.totalHits;
 
     return response.data;
   }
@@ -43,11 +43,11 @@ export class PixabayAPI {
     return this.#curPage;
   }
 
-  set totalPages(newTotalPages) {
-    this.#totalPages = newTotalPages;
+  set totalHits(newTotalHits) {
+    this.#totalHits = newTotalHits;
   }
-  get totalPages() {
-    return this.#totalPages;
+  get totalHits() {
+    return this.#totalHits;
   }
 
   set perPage(newPerPage) {
