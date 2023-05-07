@@ -1,3 +1,4 @@
+import renderPhotoCardsMarkup from './renderMarkup';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 let lightbox = null;
@@ -48,7 +49,11 @@ function onSubmit(e) {
         return;
       }
       Notify.success(`Hooray! We found ${pictures.totalHits} images.`);
-      renderPhotoCardsMarkup(pictures.hits);
+
+      galleryEl.insertAdjacentHTML(
+        'beforeend',
+        renderPhotoCardsMarkup(pictures.hits)
+      );
       observer.observe(guardEl);
       enableSimpleLightBox();
     })
@@ -58,68 +63,27 @@ function onSubmit(e) {
 function onPagination(entries, observer) {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
+      if (galleryEl.children.length === 0) return;
+      if (api.page >= Math.ceil(api.totalPages / api.perPage)) {
+        Notify.failure(
+          "We're sorry, but you've reached the end of search results."
+        );
+        return;
+      }
       api.nextPage();
       api
         .getPicturesByQuerry()
         .then(pictures => {
-          if (galleryEl.children.length === 0) return;
-          if (api.page > Math.ceil(pictures.totalHits / api.perPage)) {
-            Notify.failure(
-              "We're sorry, but you've reached the end of search results."
-            );
-            return;
-          }
-
-          renderPhotoCardsMarkup(pictures.hits);
+          galleryEl.insertAdjacentHTML(
+            'beforeend',
+            renderPhotoCardsMarkup(pictures.hits)
+          );
           smoothScroll();
           lightbox.refresh(); // Destroys and reinitilized the lightbox, needed for eg. Ajax Calls, or after dom manipulations
         })
         .catch(console.log);
     }
   });
-}
-
-function renderPhotoCardsMarkup(pictures) {
-  const markup = pictures
-    .map(
-      ({
-        webformatURL,
-        largeImageURL,
-        tags,
-        likes,
-        views,
-        comments,
-        downloads,
-      }) => {
-        return `
-              <a href="${largeImageURL}" class="photo-link">
-                <div class="photo-card">
-                  <img src="${webformatURL}" alt="${tags}" loading="lazy width="370" hight="200"" />
-                  <div class="info">
-                    <p class="info-item">
-                      <b>Likes</b>
-                      ${likes}
-                    </p>
-                    <p class="info-item">
-                      <b>Views</b>
-                      ${views}
-                    </p>
-                    <p class="info-item">
-                      <b>Comments</b>
-                      ${comments}
-                    </p>
-                    <p class="info-item">
-                      <b>Downloads</b>
-                      ${downloads}
-                    </p>
-                  </div>
-                </div>
-              </a>
-                `;
-      }
-    )
-    .join(``);
-  galleryEl.insertAdjacentHTML('beforeend', markup);
 }
 
 function smoothScroll() {
